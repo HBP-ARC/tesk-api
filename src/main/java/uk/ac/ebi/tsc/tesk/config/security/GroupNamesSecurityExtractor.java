@@ -31,7 +31,12 @@ public class GroupNamesSecurityExtractor implements AuthoritiesExtractor {
     public List<GrantedAuthority> extractAuthorities(Map<String, Object> map) {
         String authorities = this.groupPrefix + ":USER";
         if (map.containsKey(this.authoritiesClaim)) {
-            authorities = asAuthorities(map.get(this.authoritiesClaim));
+            //authorities = asAuthorities(map.get(this.authoritiesClaim));
+            String[] groups = new String[3];
+            groups[0] = "GROUP_PREFIX:PARENT_GROUP:ENV_SUBGROUP";
+            groups[1] = "GROUP_PREFIX:PARENT_GROUP:ENV_SUBGROUP:" + map.get(this.authoritiesClaim);
+            groups[2] = "GROUP_PREFIX:PARENT_GROUP:ENV_SUBGROUP:" + map.get(this.authoritiesClaim) + ":ADMIN";
+            authorities = asAuthorities(groups);
         }
         return AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
     }
