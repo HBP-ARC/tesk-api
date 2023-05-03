@@ -1,0 +1,24 @@
+name: Mirror to Ebrains
+
+on:
+  push:
+    branches: [ ebrains ]
+
+jobs:
+  to_ebrains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: syncmaster
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "HBP-ARC/tesk-api"
+          source_branch: "ebrains"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/technical-coordination/private/workflows/tesk-api.git"
+          destination_branch: "main"
+      - name: synctags
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "HBP-ARC/tesk-api"
+          source_branch: "refs/tags/*"
+          destination_repo: "https://ghpusher:${{ secrets.EBRAINS_GITLAB_ACCESS_TOKEN }}@gitlab.ebrains.eu/technical-coordination/private/workflows/tesk-api.git"
+          destination_branch: "refs/tags/*"
